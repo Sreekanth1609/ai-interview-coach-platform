@@ -1,14 +1,19 @@
-# Use lightweight Java 21 image
-FROM eclipse-temurin:21-jdk-alpine
+# Build stage
+FROM gradle:8.7-jdk21 AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy jar file
-COPY build/libs/*.jar app.jar
+COPY . .
 
-# Expose application port
+RUN gradle clean build -x test
+
+# Runtime stage
+FROM eclipse-temurin:21-jdk
+
+WORKDIR /app
+
+COPY --from=build /app/build/libs/*.jar app.jar
+
 EXPOSE 8081
 
-# Run application
 ENTRYPOINT ["java", "-jar", "app.jar"]
