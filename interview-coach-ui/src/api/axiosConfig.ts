@@ -5,7 +5,7 @@ import axios from "axios";
 import { getToken } from "../utils/token";
 
 const API = axios.create({
-  baseURL: "http://localhost:8085",
+  baseURL: "https://api-gateway-iu1t.onrender.com",
 });
 
 API.interceptors.request.use(
